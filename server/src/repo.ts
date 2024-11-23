@@ -41,14 +41,15 @@ export async function findAnswersByQuestionId(questionId: number) {
 export async function searchQuestionsAndAnswers(searchString: string) {
   return (
     (await sql`
-  SELECT q.uuid, q.id, q.title, q.body, q.score, q.created_at
+  SELECT DISTINCT ON (q.uuid) q.uuid, q.id, q.title, q.body, q.score, q.created_at
   FROM question q
   LEFT JOIN answer a on q.uuid = a.question_uuid
   WHERE
     (q.content_tsvector @@ plainto_tsquery('english', ${searchString})) OR
     (a.content_tsvector @@ plainto_tsquery('english', ${searchString}))
-  ORDER BY ts_rank(q.content_tsvector, plainto_tsquery('english', ${searchString})) DESC,
-    ts_rank(a.content_tsvector, plainto_tsquery('english', ${searchString})) DESC;`.execute(
+  ORDER BY q.uuid,
+           ts_rank(q.content_tsvector, plainto_tsquery('english', ${searchString})) DESC,
+           ts_rank(a.content_tsvector, plainto_tsquery('english', ${searchString})) DESC;`.execute(
       db
     )) as any
   ).rows;
