@@ -1,6 +1,7 @@
 // API server definition and instantiation.
 
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 import {
   addAnswerToQuestion,
   getAnswersForQuestion,
@@ -10,6 +11,7 @@ import {
 
 const app: Express = express();
 app.use(express.json());
+app.use(cors()); // allow frontend to hit backend without being served from it
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("Server alive at " + new Date());
