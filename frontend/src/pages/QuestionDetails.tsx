@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { serverBaseUrl } from "../constants";
+import { Answer, Question } from "../types";
 
 async function fetchAnswersForQuestion(questionId: number) {
   const response = await fetch(
@@ -12,7 +13,8 @@ async function fetchAnswersForQuestion(questionId: number) {
     return [];
   }
 
-  return await response.json();
+  const json = await response.json();
+  return json.answers as Answer[];
 }
 
 async function createNewAnswer(questionId: number, answerBody: string) {
@@ -34,16 +36,15 @@ async function createNewAnswer(questionId: number, answerBody: string) {
 }
 
 interface QuestionDetailsProps {
-  question: any;
+  question: Question;
   onClose: () => void;
 }
 
 function QuestionDetails({ question, onClose }: QuestionDetailsProps) {
-  const [answers, setAnswers] = useState<any[]>([]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [newAnswerText, setNewAnswerText] = useState<string>("");
   const loadQuestions = async () => {
-    const retrievedAnswers = await fetchAnswersForQuestion(question.id);
-    setAnswers(retrievedAnswers.answers ?? []);
+    setAnswers((await fetchAnswersForQuestion(question.id)) ?? []);
   };
   const saveAnswer = async () => {
     const success = await createNewAnswer(question.id, newAnswerText);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { serverBaseUrl } from "../constants";
 import QuestionDetails from "./QuestionDetails";
+import { Question } from "../types";
 
 async function fetchQuestions() {
   const response = await fetch(`${serverBaseUrl}/questions`);
@@ -9,21 +10,19 @@ async function fetchQuestions() {
     return [];
   }
 
-  return await response.json();
+  const json = await response.json();
+  return json.questions as Question[];
 }
 
 function QuestionsList() {
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   useEffect(() => {
     const loadQuestions = async () => {
-      const retrievedQuestions = await fetchQuestions();
-      setQuestions(retrievedQuestions.questions ?? []);
+      setQuestions((await fetchQuestions()) ?? []);
     };
     loadQuestions();
   }, []);
-  const [openedQuestion, setOpenedQuestion] = useState<any | undefined | null>(
-    null
-  );
+  const [openedQuestion, setOpenedQuestion] = useState<Question | null>(null);
 
   return (
     <div>
