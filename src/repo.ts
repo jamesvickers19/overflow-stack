@@ -1,5 +1,6 @@
 // Database operations.
 
+import { sql } from "kysely";
 import { db } from "./database";
 import { AnswerTable, QuestionTable } from "./database-types";
 import { Answer, Question } from "./types";
@@ -27,6 +28,22 @@ export async function findAnswersByQuestionId(questionId: number) {
     .orderBy("created_at")
     .selectAll()
     .execute();
+}
+
+export async function searchQuestionsAndAnswers(searchString: string) {
+  return (
+    (await sql`
+  SELECT q.uuid, q.id, q.title, q.body, q.score, q.created_at
+  FROM question q
+  LEFT JOIN answer a on q.uuid = a.question_uuid
+  WHERE
+    (q.content_tsvector @@ plainto_tsquery('english', ${searchString})) OR
+    (a.content_tsvector @@ plainto_tsquery('english', ${searchString}))
+  ORDER BY ts_rank(q.content_tsvector, plainto_tsquery('english', ${searchString})) DESC,
+    ts_rank(a.content_tsvector, plainto_tsquery('english', ${searchString})) DESC;`.execute(
+      db
+    )) as any
+  ).rows;
 }
 
 export async function saveAnswerForQuestionId(

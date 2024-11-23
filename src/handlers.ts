@@ -4,9 +4,12 @@ import {
   findAnswersByQuestionId,
   findQuestionById,
   saveAnswerForQuestionId,
+  searchQuestionsAndAnswers,
 } from "./repo";
 import { z } from "zod";
 import { Request, Response } from "express";
+
+const stringIsBlank = (str: string) => str.trim().length === 0;
 
 const addAnswerRequestSchema = z.object({
   questionId: z.number(),
@@ -24,7 +27,7 @@ export async function addAnswerToQuestion(req: Request, res: Response) {
 
   const addAnswerRequest: AddAnswerRequest = parsedRequest.data;
 
-  if (addAnswerRequest.answerBody.trim().length === 0) {
+  if (stringIsBlank(addAnswerRequest.answerBody)) {
     res.status(400).json({ errors: ["Answer body cannot be empty or blank"] });
     return;
   }
@@ -67,4 +70,35 @@ export async function getAnswersForQuestion(req: Request, res: Response) {
 
   const answers = await findAnswersByQuestionId(questionId);
   res.json({ answers });
+}
+
+const searchQuestionsAndAnswersRequestSchema = z.object({
+  query: z.string(),
+});
+type SearchQuestionsAndAnswersRequest = z.infer<
+  typeof searchQuestionsAndAnswersRequestSchema
+>;
+
+export async function handleSearchQuestionsAndAnswers(
+  req: Request,
+  res: Response
+) {
+  const parsedRequest = searchQuestionsAndAnswersRequestSchema.safeParse(
+    req.body
+  );
+
+  if (!parsedRequest.success) {
+    res.status(400).json({ errors: parsedRequest.error.errors });
+    return;
+  }
+
+  const searchRequest: SearchQuestionsAndAnswersRequest = parsedRequest.data;
+  const query = searchRequest.query;
+  if (stringIsBlank(query)) {
+    res.status(400).json({ errors: ["query cannot be empty or blank"] });
+    return;
+  }
+
+  const results = await searchQuestionsAndAnswers(query);
+  res.json({ results });
 }

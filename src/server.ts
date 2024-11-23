@@ -1,7 +1,11 @@
 // API server definition and instantiation.
 
 import express, { Express, Request, Response } from "express";
-import { addAnswerToQuestion, getAnswersForQuestion } from "./handlers";
+import {
+  addAnswerToQuestion,
+  getAnswersForQuestion,
+  handleSearchQuestionsAndAnswers,
+} from "./handlers";
 
 const app: Express = express();
 app.use(express.json());
@@ -19,6 +23,10 @@ app.get(
 
 app.post("/add-answer-to-question", async (req: Request, res: Response) => {
   await addAnswerToQuestion(req, res);
+});
+
+app.post("/search", async (req: Request, res: Response) => {
+  await handleSearchQuestionsAndAnswers(req, res);
 });
 
 const port = 3000;

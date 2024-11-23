@@ -12,6 +12,7 @@ export interface QuestionTable {
   id?: number;
   title: string;
   body: string;
+  content_tsvector?: string;
   created_at?: Date;
 }
 
