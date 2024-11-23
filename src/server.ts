@@ -1,13 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import {
   findAnswersByQuestionId,
   findQuestionById,
   saveAnswerForQuestionId,
 } from "./repo";
 import { z } from "zod";
-
-dotenv.config();
 
 const app: Express = express();
 app.use(express.json());
@@ -80,7 +77,7 @@ app.post("/add-answer-to-question", async (req: Request, res: Response) => {
   res.status(201).json({ success: true, savedAnswer });
 });
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
