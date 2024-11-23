@@ -1,3 +1,5 @@
+// Database operations.
+
 import { db } from "./database";
 import { AnswerTable, QuestionTable } from "./database-types";
 import { Answer, Question } from "./types";

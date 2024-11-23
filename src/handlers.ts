@@ -1,3 +1,5 @@
+// Handlers for API endpoints.
+
 import {
   findAnswersByQuestionId,
   findQuestionById,

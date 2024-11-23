@@ -1,3 +1,5 @@
+// Contains types representing the database schema, for use with the Kysely library.
+
 import { Insertable, Selectable } from "kysely";
 
 export interface Database {

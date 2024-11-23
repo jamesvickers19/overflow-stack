@@ -1,3 +1,5 @@
+// Domain types, separated from the database types for decoupling.
+
 export type Question = {
   uuid?: string;
   id?: number;

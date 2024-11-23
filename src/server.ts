@@ -1,3 +1,5 @@
+// API server definition and instantiation.
+
 import express, { Express, Request, Response } from "express";
 import { addAnswerToQuestion, getAnswersForQuestion } from "./handlers";
 

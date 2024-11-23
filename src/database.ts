@@ -1,3 +1,5 @@
+// Connection setup for Kysely.
+
 import { Database } from "./database-types";
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
