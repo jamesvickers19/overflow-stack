@@ -16,7 +16,7 @@ const getEntityUUID = (uuid?: string, id?: number) =>
 export async function getAllQuestions() {
   return await db
     .selectFrom("question")
-    .selectAll()
+    .select(["uuid", "id", "title", "body", "created_at"])
     .orderBy("created_at", "desc")
     .execute();
 }
@@ -24,24 +24,24 @@ export async function getAllQuestions() {
 export async function findQuestionById(id: number) {
   return await db
     .selectFrom("question")
+    .select(["uuid", "id", "title", "body", "created_at"])
     .where("id", "=", id)
-    .selectAll()
     .executeTakeFirst();
 }
 
 export async function findAnswersByQuestionId(questionId: number) {
   return await db
     .selectFrom("answer")
+    .select(["uuid", "id", "body", "question_uuid", "created_at"])
     .where("question_uuid", "=", hashNumericalIdToUUID(questionId))
     .orderBy("created_at", "desc")
-    .selectAll()
     .execute();
 }
 
 export async function searchQuestionsAndAnswers(searchString: string) {
   return (
     (await sql`
-  SELECT DISTINCT ON (q.uuid) q.uuid, q.id, q.title, q.body, q.score, q.created_at
+  SELECT DISTINCT ON (q.uuid) q.uuid, q.id, q.title, q.body, q.created_at
   FROM question q
   LEFT JOIN answer a on q.uuid = a.question_uuid
   WHERE
@@ -62,7 +62,7 @@ export async function saveAnswerForQuestionId(
   const savedAnswer = await db
     .insertInto("answer")
     .values(answerToTable(hashNumericalIdToUUID(questionId), answer))
-    .returningAll()
+    .returning(["uuid", "id", "body", "question_uuid", "created_at"])
     .executeTakeFirst();
   return savedAnswer;
 }

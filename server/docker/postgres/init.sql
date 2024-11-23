@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS question (
     id int,
     title text NOT NULL,
     body text NOT NULL,
-    score int,
     created_at timestamp without time zone default now(),
     content_tsvector tsvector GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED
 );
@@ -15,8 +14,6 @@ CREATE TABLE IF NOT EXISTS answer (
     id int,
     question_uuid uuid REFERENCES question(uuid),
     body text NOT NULL,
-    score int,
-    accepted boolean,
     created_at timestamp without time zone default now(),
     content_tsvector tsvector GENERATED ALWAYS AS (to_tsvector('english', body)) STORED
 );
