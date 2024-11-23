@@ -48,7 +48,6 @@ const addAnswerRequestSchema = z.object({
 type AddAnswerRequest = z.infer<typeof addAnswerRequestSchema>;
 
 app.post("/add-answer-to-question", async (req: Request, res: Response) => {
-  console.log("req.body", req.body);
   const parsedRequest = addAnswerRequestSchema.safeParse(req.body);
 
   if (!parsedRequest.success) {
@@ -57,6 +56,12 @@ app.post("/add-answer-to-question", async (req: Request, res: Response) => {
   }
 
   const addAnswerRequest: AddAnswerRequest = parsedRequest.data;
+
+  if (addAnswerRequest.answerBody.trim().length === 0) {
+    res.status(400).json({ errors: ["Answer body cannot be empty or blank"] });
+    return;
+  }
+
   const questionId = addAnswerRequest.questionId;
   const existingQuestion = await findQuestionById(questionId);
   if (!existingQuestion) {
