@@ -1,6 +1,6 @@
-dist/**/*
+**/dist/
 .env
-node_modules
+**/node_modules
 .idea
 *.iml
 .DS_Store

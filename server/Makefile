@@ -1,23 +1,20 @@
 build:
 	npm run build
 
-up:
+db/up:
 	docker compose up -d --build
 
-down:
+db/down:
 	docker compose down
 
-destroy:
+db/destroy:
 	docker compose down -v
 
 load-data:
 	ts-node scripts/load_stackoverflow_postgres.ts
 
-start:
-	npm run build && npm run start
+start: build
+	npm run start
 
-start-watch:
+watch:
 	npm run start-watch
-
-test:
-	npm test

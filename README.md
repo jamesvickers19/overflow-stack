@@ -1,6 +1,6 @@
 # Overview
 
-Typescript Express server atop Postgres data store, with API for questions and answers similar to a basic StackOverflow data model. It uses Kysley for Postgres interaction.
+Typescript Express server atop Postgres data store, with API for questions and answers similar to a basic StackOverflow data model. It uses Kysley for Postgres interaction. A prototype frontend application is included.
 
 Project bootstrapped roughly following: https://blog.logrocket.com/how-to-set-up-node-typescript-express/
 
@@ -15,17 +15,25 @@ A couple of decisions have been made to improve the representation from the samp
 
 # How to use
 
-Uses a [Makefile](Makefile) for convenience. Some things you can do:
+## Server
 
-Run the database: `make up`
+Uses a [Makefile](./server/Makefile) for convenience.
+
+Run the database: `make db/up`
 
 Load the sample dataset into the database: `make load-data`
 
 Run the server: `make start`
 
-Run the server with hot reloading: `make start-watch`
+Run the server with hot reloading: `make watch`
 
 Build the server: `make build`
+
+## Frontend user interface
+
+Has its own [Makefile](./frontend/Makefile) for convenience.
+
+Run locally: `make ui/start`
 
 ## Example API calls
 
@@ -56,6 +64,12 @@ curl --header "Content-Type: application/json" --request POST -d '{"query": "rea
 ```
 
 # Future Work
+
+## Improve frontend
+
+Obviously leaves a lot to be desired in terms of apperance. Special characters and markdown could be rendered accordingly.
+
+The frontend could perhaps re-use some types the backend defines; it's not using types at all currently.
 
 ## Add tests
 
