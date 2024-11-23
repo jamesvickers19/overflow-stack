@@ -3,6 +3,7 @@
 import {
   findAnswersByQuestionId,
   findQuestionById,
+  getAllQuestions,
   saveAnswerForQuestionId,
   searchQuestionsAndAnswers,
 } from "./repo";
@@ -48,6 +49,11 @@ export async function addAnswerToQuestion(req: Request, res: Response) {
     questionId
   );
   res.status(201).json({ success: true, savedAnswer });
+}
+
+export async function getAllQuestionsHandler(_req: Request, res: Response) {
+  const allQuestions = await getAllQuestions();
+  res.json({ questions: allQuestions });
 }
 
 export async function getAnswersForQuestion(req: Request, res: Response) {

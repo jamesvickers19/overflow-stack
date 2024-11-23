@@ -31,6 +31,12 @@ Build the server: `make build`
 
 These examples use things from the sample dataset, so you may get errors if that's not loaded.
 
+Retrieve all questions:
+
+```sh
+curl -s localhost:3000/questions
+```
+
 Get answers for a question by id:
 
 ```sh

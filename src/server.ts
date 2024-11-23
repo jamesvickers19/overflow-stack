@@ -4,6 +4,7 @@ import express, { Express, Request, Response } from "express";
 import {
   addAnswerToQuestion,
   getAnswersForQuestion,
+  getAllQuestionsHandler,
   handleSearchQuestionsAndAnswers,
 } from "./handlers";
 
@@ -12,6 +13,10 @@ app.use(express.json());
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("Server alive at " + new Date());
+});
+
+app.get("/questions", async (req: Request, res: Response) => {
+  await getAllQuestionsHandler(req, res);
 });
 
 app.get(

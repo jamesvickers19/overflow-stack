@@ -13,6 +13,14 @@ export const hashNumericalIdToUUID = (id: number) =>
 const getEntityUUID = (uuid?: string, id?: number) =>
   uuid ?? (id ? hashNumericalIdToUUID(id) : uuidv4());
 
+export async function getAllQuestions() {
+  return await db
+    .selectFrom("question")
+    .selectAll()
+    .orderBy("created_at", "desc")
+    .execute();
+}
+
 export async function findQuestionById(id: number) {
   return await db
     .selectFrom("question")
@@ -25,7 +33,7 @@ export async function findAnswersByQuestionId(questionId: number) {
   return await db
     .selectFrom("answer")
     .where("question_uuid", "=", hashNumericalIdToUUID(questionId))
-    .orderBy("created_at")
+    .orderBy("created_at", "desc")
     .selectAll()
     .execute();
 }
