@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS question (
     uuid uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    id bigint,
+    id int,
     title text NOT NULL,
     body text NOT NULL,
     score int,
@@ -12,7 +12,7 @@ CREATE INDEX idx_question_content_tsvector ON question USING gin(content_tsvecto
 
 CREATE TABLE IF NOT EXISTS answer (
     uuid uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    id bigint,
+    id int,
     question_uuid uuid REFERENCES question(uuid),
     body text NOT NULL,
     score int,
