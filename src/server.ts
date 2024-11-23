@@ -1,10 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import {
-  findAnswersByQuestionId,
-  findQuestionById,
-  saveAnswerForQuestionId,
-} from "./repo";
-import { z } from "zod";
+import { addAnswerToQuestion, getAnswersForQuestion } from "./handlers";
 
 const app: Express = express();
 app.use(express.json());
@@ -16,65 +11,12 @@ app.get("/", (_req: Request, res: Response) => {
 app.get(
   "/question/:questionId/answers",
   async (req: Request, res: Response) => {
-    const questionIdParam = req.params.questionId;
-    const questionId = Number(questionIdParam);
-    if (isNaN(questionId)) {
-      res.status(400).json({
-        errors: [
-          `questionId route parameter must be a number, but got: '${questionIdParam}'`,
-        ],
-      });
-    }
-    const existingQuestion = await findQuestionById(questionId);
-    if (!existingQuestion) {
-      res
-        .status(404)
-        .json({ errors: [`question with id ${questionId} does not exist`] });
-      return;
-    }
-
-    const answers = await findAnswersByQuestionId(questionId);
-    res.json({ answers });
+    await getAnswersForQuestion(req, res);
   }
 );
 
-const addAnswerRequestSchema = z.object({
-  questionId: z.number(),
-  answerBody: z.string(),
-});
-type AddAnswerRequest = z.infer<typeof addAnswerRequestSchema>;
-
 app.post("/add-answer-to-question", async (req: Request, res: Response) => {
-  const parsedRequest = addAnswerRequestSchema.safeParse(req.body);
-
-  if (!parsedRequest.success) {
-    res.status(400).json({ errors: parsedRequest.error.errors });
-    return;
-  }
-
-  const addAnswerRequest: AddAnswerRequest = parsedRequest.data;
-
-  if (addAnswerRequest.answerBody.trim().length === 0) {
-    res.status(400).json({ errors: ["Answer body cannot be empty or blank"] });
-    return;
-  }
-
-  const questionId = addAnswerRequest.questionId;
-  const existingQuestion = await findQuestionById(questionId);
-  if (!existingQuestion) {
-    res
-      .status(404)
-      .json({ errors: [`question with id ${questionId} does not exist`] });
-    return;
-  }
-
-  const savedAnswer = await saveAnswerForQuestionId(
-    {
-      body: addAnswerRequest.answerBody,
-    },
-    questionId
-  );
-  res.status(201).json({ success: true, savedAnswer });
+  await addAnswerToQuestion(req, res);
 });
 
 const port = 3000;
