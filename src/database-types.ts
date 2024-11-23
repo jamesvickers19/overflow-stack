@@ -10,6 +10,7 @@ export interface QuestionTable {
   id?: number;
   title: string;
   body: string;
+  created_at?: Date;
 }
 
 export interface AnswerTable {
@@ -17,6 +18,7 @@ export interface AnswerTable {
   id?: number;
   body: string;
   question_uuid: string;
+  created_at?: Date;
 }
 
 export type Question = Selectable<QuestionTable>;

@@ -3,16 +3,16 @@ export type Question = {
   id?: number;
   title: string;
   body: string;
-  creation: number;
   score: number;
   answers: Answer[];
+  createdAt?: Date;
 };
 
 export type Answer = {
   uuid?: string;
   id?: number;
   body: string;
-  //creation: number;
   score?: number;
   accepted?: boolean;
+  createdAt?: Date;
 };

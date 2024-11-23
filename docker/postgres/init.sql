@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS question (
     id bigint,
     title text NOT NULL,
     body text NOT NULL,
-    score int
+    score int,
+    created_at timestamp without time zone default now()
 );
 
 CREATE TABLE IF NOT EXISTS answer (
@@ -12,5 +13,6 @@ CREATE TABLE IF NOT EXISTS answer (
     question_uuid uuid REFERENCES question(uuid),
     body text NOT NULL,
     score int,
-    accepted boolean
+    accepted boolean,
+    created_at timestamp without time zone default now()
 );

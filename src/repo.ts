@@ -22,6 +22,7 @@ export async function findAnswersByQuestionId(questionId: number) {
   return await db
     .selectFrom("answer")
     .where("question_uuid", "=", hashNumericalIdToUUID(questionId))
+    .orderBy("created_at")
     .selectAll()
     .execute();
 }
@@ -44,6 +45,7 @@ function answerToTable(questionUUID: string, answer: Answer): AnswerTable {
     id: answer.id,
     body: answer.body,
     question_uuid: questionUUID,
+    created_at: answer.createdAt,
   };
 }
 
@@ -57,6 +59,7 @@ export async function saveQuestions(questions: Question[]) {
       id: q.id,
       title: q.title,
       body: q.body,
+      created_at: q.createdAt,
     });
     answersToWrite = answersToWrite.concat(
       q.answers.map((a) => answerToTable(questionUUID, a))
