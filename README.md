@@ -71,11 +71,17 @@ Obviously leaves a lot to be desired in terms of apperance. Special characters a
 
 The frontend could perhaps re-use some types the backend defines; it's not using types at all currently.
 
+## Model and support other types of data
+
+Some things in the available data like answer score are not used.
+
 ## Add tests
 
 Deferred because of time constraints and wanting to not nail things down while design and functionality is evolving.
 
 ## Add linting
+
+e.g. eslint
 
 ## Deployment improvement
 
@@ -89,12 +95,10 @@ Flyway or a tool like it. Currently migrations are just baked into an `init.sql`
 
 ## Use Continuous Integration
 
+Jenkins, CircleCI, etc.
+
 ## Users not included
 
 The service has no concept of users, authorization, authentication, etc.
 The sample data set also has users but they are not used.
 Doing things like creating an answer should attach what user performed that action.
-
-```
-
-```
