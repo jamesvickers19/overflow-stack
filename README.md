@@ -23,6 +23,8 @@ Run the database: `make db/up`
 
 Load the sample dataset into the database: `make load-data`
 
+Install the code: `make install`
+
 Run the server: `make start`
 
 Run the server with hot reloading: `make watch`
@@ -32,6 +34,8 @@ Build the server: `make build`
 ## Frontend user interface
 
 Has its own [Makefile](./frontend/Makefile) for convenience.
+
+Install the code: `make install`
 
 Run locally: `make ui/start`
 
